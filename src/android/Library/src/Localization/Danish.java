@@ -10,5 +10,6 @@ public class Danish extends Language {
     addMessage("MAXIMUM_SELECT_PHOTOS", "Du kan kun vælge %d billeder ad gangen.");
     addMessage("OUT_OF_MEMORY", "Kunne ikke indlæse billedet i hukommelsen");
     addMessage("UNABLE_TO_OPEN_IMAGE", "Kunne ikke åbne billedet.");
+    addMessage("NAME_OF_IMAGE", "Navnet på billedet");
   }
 }
