@@ -13,5 +13,6 @@ public class English extends Language {
     addMessage("NAME_OF_IMAGE", "Name of image");
     addMessage("FIRST_IMAGE", "First image");
     addMessage("SECOND_IMAGE", "Second image");
+    addMessage("CHOSEN", "selected");
   }
 }
