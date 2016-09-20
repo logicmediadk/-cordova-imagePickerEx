@@ -3,25 +3,25 @@
  *
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following  conditions are met:
  *
- *   Redistributions of source code must retain the above copyright notice, 
+ *   Redistributions of source code must retain the above copyright notice,
  *      this list of conditions and the following disclaimer.
- *   Redistributions in binary form must reproduce the above copyright notice, 
- *      this list of conditions and the following  disclaimer in the 
+ *   Redistributions in binary form must reproduce the above copyright notice,
+ *      this list of conditions and the following  disclaimer in the
  *      documentation and/or other materials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,  BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT  SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR  BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDIN G NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,  BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT  SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR  BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDIN G NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH  DAMAGE
  *
  * Code modified by Andrew Stephan for Sync OnSet
@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.lang.String;
 
 import com.synconset.FakeR;
 import android.app.Activity;
@@ -132,19 +133,17 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         fakeR = new FakeR(this);
         setContentView(fakeR.getId("layout", "multiselectorgrid"));
         fileNames.clear();
-        
-        //String picName = "storage/emulated/0/DCIM/Camera/20150331_095822.jpg";
-        //int picRotation = 90;
+
         maxImages = getIntent().getIntExtra(MAX_IMAGES_KEY, NOLIMIT);
         desiredWidth = getIntent().getIntExtra(WIDTH_KEY, 0);
         desiredHeight = getIntent().getIntExtra(HEIGHT_KEY, 0);
         quality = getIntent().getIntExtra(QUALITY_KEY, 0);
         maxImageCount = maxImages;
         selectedImages = getIntent().getStringExtra(SELECTED_IMAGES_KEY);
-        
+
         Display display = getWindowManager().getDefaultDisplay();
         int width = display.getWidth();
-        
+
         colWidth = width / 4;
 
         gridView = (GridView) findViewById(fakeR.getId("id", "gridview"));
@@ -177,15 +176,15 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 
         ia = new ImageAdapter(this);
         gridView.setAdapter(ia);
+
         LoaderManager.enableDebugLogging(false);
         getLoaderManager().initLoader(CURSORLOADER_THUMBS, null, this);
         getLoaderManager().initLoader(CURSORLOADER_REAL, null, this);
-        //setupPresets();
         setupHeader();
         updateAcceptButton();
         progress = new ProgressDialog(this);
-        progress.setTitle("Processing Images");
-        progress.setMessage("This may take a few moments");
+        progress.setTitle(Messages.get("PROCESS_IMAGES_TITLE"));
+        progress.setMessage(Messages.get("PROCESS_IMAGES_MESSAGE"));
 		((TextView) getActionBar().getCustomView().findViewById(fakeR.getId("id", "actionbar_title_textview"))).setText("");
     }
     
@@ -193,25 +192,19 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
     public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
         String name = getImageName(position);
         int rotation = getImageRotation(position);
-        /*AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setTitle("Pic name");
-        builder1.setMessage(name);
-        builder1.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) { 
-                dialog.cancel();
-            }
-        });
-        AlertDialog alert1 = builder1.create();
-        alert1.show();*/
-		
+
+        if (name == null) {
+            return;
+        }
+
         boolean isChecked = !isChecked(position);
         if (maxImages == 0 && isChecked) {
             isChecked = false;
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Maximum " + maxImageCount + " Photos");
-            builder.setMessage("You can only select " + maxImageCount + " photos at a time.");
+            builder.setTitle(String.format(Messages.get("MAXIMUM_PHOTOS"), maxImageCount));
+            builder.setMessage(String.format(Messages.get("MAXIMUM_SELECT_PHOTOS"), maxImageCount));
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) { 
+            	public void onClick(DialogInterface dialog, int which) { 
                     dialog.cancel();
                 }
             });
@@ -246,7 +239,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         }
 
         checkStatus.put(position, isChecked);
-        ((TextView) getActionBar().getCustomView().findViewById(fakeR.getId("id", "actionbar_title_textview"))).setText((maxImageCount-maxImages) + " foto's");
+        ((TextView) getActionBar().getCustomView().findViewById(fakeR.getId("id", "actionbar_title_textview"))).setText((maxImageCount-maxImages) + " " + Messages.get("CHOSEN"));
         updateAcceptButton();
     }
 
@@ -424,8 +417,8 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
     		String name = actualimagecursor.getString(actual_image_column_index);
     		/*if(actualimagecursor.getPosition() == 0 && selectedImagesList.size() > 0){
     			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Name of image");
-                builder.setMessage("First image: " + name + " Second image: " + selectedImagesList.get(1));
+                builder.setTitle(Messages.get("NAME_OF_IMAGE"));
+                builder.setMessage(Messages.get("FIRST_IMAGE") + ": " + name + " " + Messages.get("SECOND_IMAGE") + ": " + selectedImagesList.get(1));
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) { 
                         dialog.cancel();
@@ -441,7 +434,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 	    		maxImages--;
     		}
     	}
-		((TextView) getActionBar().getCustomView().findViewById(fakeR.getId("id", "actionbar_title_textview"))).setText((maxImageCount-maxImages) + " foto's");
+		((TextView) getActionBar().getCustomView().findViewById(fakeR.getId("id", "actionbar_title_textview"))).setText((maxImageCount-maxImages) + " " + Messages.get("CHOSEN"));
     	updateAcceptButton();
     }
     /*********************
@@ -516,14 +509,14 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
                 if (android.os.Build.VERSION.SDK_INT>=16) {
                   imageView.setImageAlpha(128);
                 } else {
-                  imageView.setAlpha(128);	
+                  imageView.setAlpha(128);
                 }
                 imageView.setBackgroundColor(selectedColor);
             } else {
                 if (android.os.Build.VERSION.SDK_INT>=16) {
                   imageView.setImageAlpha(255);
                 } else {
-                  imageView.setAlpha(255);	
+                  imageView.setAlpha(255);
                 }
                 imageView.setBackgroundColor(Color.TRANSPARENT);
             }
@@ -534,8 +527,8 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
             return imageView;
         }
     }
-    
-    
+
+
     private class ResizeImagesTask extends AsyncTask<Set<Entry<String, Integer>>, Void, ArrayList<String>> {
         private Exception asyncTaskError = null;
 
@@ -571,7 +564,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
                             try {
                                 bmp = this.tryToGetBitmap(file, options, rotate, false);
                             } catch (OutOfMemoryError e2) {
-                                throw new IOException("Unable to load image into memory.");
+                                throw new IOException(Messages.get("OUT_OF_MEMORY"));
                             }
                         }
                     } else {
@@ -588,7 +581,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
                                 try {
                                     bmp = this.tryToGetBitmap(file, options, rotate, false);
                                 } catch (OutOfMemoryError e3) {
-                                    throw new IOException("Unable to load image into memory.");
+                                    throw new IOException(Messages.get("OUT_OF_MEMORY"));
                                 }
                             }
                         }
@@ -647,7 +640,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
                 bmp = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
             }
             if (bmp == null) {
-                throw new IOException("The image file could not be opened.");
+                throw new IOException(Messages.get("UNABLE_TO_OPEN_IMAGE"));
             }
             if (options != null && shouldScale) {
                 float scale = calculateScale(options.outWidth, options.outHeight);
