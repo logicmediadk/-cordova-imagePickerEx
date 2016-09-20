@@ -115,7 +115,7 @@
                                                       animated:NO];
             }
             NSString *numSelectedImages;
-            numSelectedImages = [NSString stringWithFormat:@"%d %s", self.totalSelectedAssets, "Foto's"];
+            numSelectedImages = [NSString stringWithFormat:@"%d %s", self.totalSelectedAssets, "valgt"];
             [self.navigationItem setTitle:numSelectedImages];
             //[self.navigationItem setTitle:self.singleSelection ? @"Pick Photo 1" : @"Pick Photos 2"];
         });
