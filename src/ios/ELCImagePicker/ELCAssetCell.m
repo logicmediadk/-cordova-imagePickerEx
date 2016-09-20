@@ -89,7 +89,7 @@
             overlayView.hidden = !asset.selected;
             id tp = asset.parent;
             NSString *numSelectedImages;
-            numSelectedImages = [NSString stringWithFormat:@"%d %s", [tp totalSelectedAssets], "Foto's"];
+            numSelectedImages = [NSString stringWithFormat:@"%d %s", [tp totalSelectedAssets], "valgt"];
             [[tp navigationItem] setTitle:numSelectedImages];
             break;
         }
