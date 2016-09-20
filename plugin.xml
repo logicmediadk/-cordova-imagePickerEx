@@ -74,6 +74,11 @@
 		    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 		</config-file>
 
+		<source-file src="src/android/Library/src/Localization/Messages.java" target-dir="src/com/synconset"/>
+	    <source-file src="src/android/Library/src/Localization/Language.java" target-dir="src/com/synconset"/>
+	    <source-file src="src/android/Library/src/Localization/English.java" target-dir="src/com/synconset"/>
+	    <source-file src="src/android/Library/src/Localization/Danish.java" target-dir="src/com/synconset"/>
+
 		<source-file src="src/android/com/synconset/ImagePicker/ImagePicker.java" target-dir="src/com/synconset" />
 		<source-file src="src/android/com/synconset/ImagePicker/FakeR.java" target-dir="src/com/synconset" />
 		
@@ -99,6 +104,7 @@
 		<source-file src="src/android/Library/res/layout/actionbar_done_button.xml" target-dir="res/layout"/>
 		<source-file src="src/android/Library/res/layout/multiselectorgrid.xml" target-dir="res/layout"/>
 		<source-file src="src/android/Library/res/values/multiimagechooser_strings_en.xml" target-dir="res/values"/>
+		<source-file src="src/android/Library/res/values-da/multiimagechooser_strings_da.xml" target-dir="res/values-da"/>
 		<source-file src="src/android/Library/res/values/themes.xml" target-dir="res/values"/>
 		
 		<source-file src="src/android/Library/res/values-de/multiimagechooser_strings_de.xml" target-dir="res/values-de"/>
