@@ -13,5 +13,6 @@ public class Danish extends Language {
     addMessage("NAME_OF_IMAGE", "Navnet på billedet");
     addMessage("FIRST_IMAGE", "Første billede");
     addMessage("SECOND_IMAGE", "Andet billede");
+    addMessage("CHOSEN", "valgte");
   }
 }
