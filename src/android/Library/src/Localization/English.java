@@ -11,5 +11,7 @@ public class English extends Language {
     addMessage("OUT_OF_MEMORY", "Unable to load image into memory.");
     addMessage("UNABLE_TO_OPEN_IMAGE", "The image file could not be opened.");
     addMessage("NAME_OF_IMAGE", "Name of image");
+    addMessage("FIRST_IMAGE", "First image");
+    addMessage("SECOND_IMAGE", "Second image");
   }
 }
